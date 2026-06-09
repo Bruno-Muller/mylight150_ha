@@ -1,0 +1,13 @@
+{
+  "domain": "mylight150",
+  "name": "MyLight150",
+  "documentation": "https://github.com/Racailloux/mylight150_ha/",
+  "issue_tracker": "https://github.com/Racailloux/mylight150_ha/issues",
+  "dependencies": [],
+  "requirements": [],
+  "codeowners": ["@Racailloux"],
+  "iot_class": "local_polling",
+  "config_flow": true,
+  "homekit": {}
+  "version": "0.1.0"
+}
