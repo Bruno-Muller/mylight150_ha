@@ -1,14 +1,14 @@
 {
   "domain": "mylight150",
   "name": "MyLight150",
-  "documentation": "https://github.com/Racailloux/mylight150_ha/",
-  "issue_tracker": "https://github.com/Racailloux/mylight150_ha/issues",
-  "dependencies": [],
-  "requirements": ["beautifulsoup4"],
   "codeowners": ["@Racailloux"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/Racailloux/mylight150_ha/",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
-  "config_flow": true,
+  "issue_tracker": "https://github.com/Racailloux/mylight150_ha/issues",
   "loggers": ["mylight150"],
+  "requirements": ["beautifulsoup4"],
   "version": "0.1.0"
 }
