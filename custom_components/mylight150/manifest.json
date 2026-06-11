@@ -8,6 +8,6 @@
   "codeowners": ["@Racailloux"],
   "iot_class": "local_polling",
   "config_flow": true,
-  "homekit": {}
-  "version": "0.1.0"
+  "homekit": {},
+  "version": "0.1.0",
 }
