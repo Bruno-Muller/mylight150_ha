@@ -1,0 +1,55 @@
+{
+  "config": {
+    "abort": {
+      "invalid_credentials": "Informations d'identification non valides",
+      "user_already_configured": "Le compte a d\u00e9j\u00e0 \u00e9t\u00e9 configur\u00e9.",
+      "reconfigure_successful": "Configuration mise à jour avec succès"
+    },
+    "create_entry": {},
+    "error": {
+      "invalid_credentials": "Informations d'identification non valides",
+      "invalid_username": "Nom d'utilisateur invalide",
+      "unexpected": "Erreur inattendue lors de la communication avec le serveur MyLight150.",
+      "user_already_configured": "Le compte a d\u00e9j\u00e0 \u00e9t\u00e9 configur\u00e9."
+    },
+    "step": {
+      "user": {
+        "data": {
+          "username": "Nom d'utilisateur",
+          "password": "Mot de passe",
+          "update_interval": "Intervalle de mise à jour",
+          "update_initial": "Mise à jour au démarrage"
+        },
+        "title": "Informations sur le compte MyLight150"
+      },
+      "reconfigure": {
+        "title": "Mise à jour de la configuration de MyLight150",
+        "description": "Mise à jour des réglages du compte **{username}**.",
+        "data": {
+          "password": "Password"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "update_initial": "Mise \u00e0 jour au d\u00e9marrage",
+          "update_interval": "Intervalle de mises \u00e0 jour"
+        },
+        "title": "Options de MyLight150",
+        "data_description": {
+          "update_initial": "Effectuer une mise \u00e0 jour imm\u00e9diatement apr\u00e8s le d\u00e9marrage.",
+          "update_interval": "Minutes entre les mises \u00e0 jour du cloud."
+        }
+      }
+    }
+  },
+  "services": {
+    "refresh_cloud_data": {
+      "name": "Actualiser les donn\u00e9es cloud",
+      "description": "R\u00e9cup\u00e8re les donn\u00e9es cloud actuelles."
+    }
+  }
+}

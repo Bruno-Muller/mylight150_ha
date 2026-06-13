@@ -1,0 +1,55 @@
+{
+  "config": {
+    "abort": {
+      "invalid_credentials": "Invalid credentials",
+      "user_already_configured": "Account has already been configured",
+      "reconfigure_successful": "Configuration updated successfully"
+    },
+    "create_entry": {},
+    "error": {
+      "invalid_credentials": "Invalid credentials",
+      "invalid_username": "Invalid username",
+      "unexpected": "Unexpected error communicating with MyLight150 server",
+      "user_already_configured": "Account has already been configured"
+    },
+    "step": {
+      "user": {
+        "data": {
+          "username": "Username",
+          "password": "Password",
+          "update_interval": "Update interval",
+          "update_initial": "Update at startup"
+        },
+        "title": "MyLight150 Account Info"
+      },
+      "reconfigure": {
+        "title": "Update MyLight150 Configuration",
+        "description": "Update settings for account **{username}**.",
+        "data": {
+          "password": "Password"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "update_initial": "Cloud Update at Startup",
+          "update_interval": "Update Interval"
+        },
+        "title": "MyLight150 Options",
+        "data_description": {
+          "update_initial": "Perform an update immediately upon startup.",
+          "update_interval": "Minutes between cloud polling updates."
+        }
+      }
+    }
+  },
+  "services": {
+    "refresh_cloud_data": {
+      "name": "Refresh Cloud Data",
+      "description": "Retrieves current cloud data."
+    }
+  }
+}
