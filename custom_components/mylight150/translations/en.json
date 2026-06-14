@@ -3,7 +3,8 @@
     "abort": {
       "invalid_credentials": "Invalid credentials",
       "user_already_configured": "Account has already been configured",
-      "reconfigure_successful": "Configuration updated successfully"
+      "reconfigure_successful": "Configuration updated successfully",
+      "already_configured": "This account is already configured."
     },
     "create_entry": {},
     "error": {
@@ -50,6 +51,32 @@
     "refresh_cloud_data": {
       "name": "Refresh Cloud Data",
       "description": "Retrieves current cloud data."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_production": { "name": "Solar production" },
+      "grid": { "name": "Grid power" },
+      "injection": { "name": "Grid injection" },
+      "load": { "name": "total load" },
+      "load_home": { "name": "Home load" },
+      "self_consumption": { "name": "Self-consumption" },
+      "independence": { "name": "Independance" },
+      "msb_state": {
+        "name": "Virtual battery status", 
+        "state": {
+          "charging": "Charging",
+          "discharging": "Discharging",
+          "idle": "Idle",
+          "full": "Full"
+        }
+      },
+      "msb_power": { "name": "Virtual battery power" },
+      "msb_autonomy": { "name": "Virtual battery autonomy" },
+      "msb_capacity": { "name": "Virtual battery capacity" },
+      "savings": { "name": "Monthly money saving " }
+    },
+    "switch": {
     }
   }
 }

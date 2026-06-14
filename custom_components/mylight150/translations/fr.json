@@ -3,7 +3,8 @@
     "abort": {
       "invalid_credentials": "Informations d'identification non valides",
       "user_already_configured": "Le compte a d\u00e9j\u00e0 \u00e9t\u00e9 configur\u00e9.",
-      "reconfigure_successful": "Configuration mise à jour avec succès"
+      "reconfigure_successful": "Configuration mise à jour avec succès",
+      "already_configured": "Ce compte est déjà configuré."
     },
     "create_entry": {},
     "error": {
@@ -26,7 +27,7 @@
         "title": "Mise à jour de la configuration de MyLight150",
         "description": "Mise à jour des réglages du compte **{username}**.",
         "data": {
-          "password": "Password"
+          "password": "Mot de passe"
         }
       }
     }
@@ -50,6 +51,32 @@
     "refresh_cloud_data": {
       "name": "Actualiser les donn\u00e9es cloud",
       "description": "R\u00e9cup\u00e8re les donn\u00e9es cloud actuelles."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_production": { "name": "Production solaire" },
+      "grid": { "name": "Puissance réseau" },
+      "injection": { "name": "Injection réseau" },
+      "load": { "name": "Consommation totale" },
+      "load_home": { "name": "Consommation maison" },
+      "self_consumption": { "name": "Autoconsommation" },
+      "independence": { "name": "Autonomie" },
+      "msb_state": {
+        "name": "État de la batterie virtuelle",
+        "state": {
+          "charging": "Charge",
+          "discharging": "Décharge",
+          "idle": "Inactif",
+          "full": "Pleine"
+        }
+      },
+      "msb_power": { "name": "Puissance batterie virtuelle" },
+      "msb_autonomy": { "name": "Autonomie batterie virtuelle" },
+      "msb_capacity": { "name": "Capacité batterie virtuelle" },
+      "savings": { "name": "Économies mensuelles" }
+    },
+    "switch": {
     }
   }
 }
