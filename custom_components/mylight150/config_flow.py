@@ -43,10 +43,10 @@ async def _validate_credentials(hass, username: str, password: str) -> str | Non
         await api.async_login_test()
         return None
     except MyLight150AuthError:
-        _LOGGER.debug("MyLight150 invalid_credentials")
+        _LOGGER.debug("MyLight150: invalid_credentials")
         return "invalid_credentials"
     except MyLight150ApiError:
-        _LOGGER.debug("MyLight150 cannot_connect")
+        _LOGGER.debug("MyLight150: cannot_connect")
         return "cannot_connect"
     except Exception:
         _LOGGER.exception("MyLight150 unexpected error during login")
@@ -91,7 +91,7 @@ class MyLight150ConfigFlow(ConfigFlow, domain=DOMAIN):
                         },
                     )
             except Exception:
-                _LOGGER.exception("MyLight150 config flow failed")
+                _LOGGER.exception("MyLight150: config flow failed")
                 _errors["base"] = "unexpected"
 
         return self.async_show_form(
@@ -136,7 +136,7 @@ class MyLight150ConfigFlow(ConfigFlow, domain=DOMAIN):
                         },
                     )
             except Exception:
-                _LOGGER.exception("MyLight150 reconfigure flow failed!")
+                _LOGGER.exception("MyLight150: reconfigure flow failed!")
                 _errors["base"] = "unexpected"
 
         return self.async_show_form(
