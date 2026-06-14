@@ -18,6 +18,8 @@ from homeassistant.helpers.selector import (
     NumberSelectorConfig,
 )
 
+
+from .api import MyLight150ApiClient, MyLight150AuthError, MyLight150ApiError
 from .const import (
     CONF_PASSWORD,
     CONF_UPDATE_INITIAL,
@@ -33,6 +35,24 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
+async def _validate_credentials(hass, username: str, password: str) -> str | None:
+    """Try to authenticate. Returns None on success, or an error key string on failure."""
+    session = async_get_clientsession(hass)
+    api = MyLight150ApiClient(hass,session, username, password)
+    try:
+        await api.async_login_test()
+        return None
+    except MyLight150AuthError:
+        _LOGGER.debug("MyLight150 invalid_credentials")
+        return "invalid_credentials"
+    except MyLight150ApiError:
+        _LOGGER.debug("MyLight150 cannot_connect")
+        return "cannot_connect"
+    except Exception:
+        _LOGGER.exception("MyLight150 unexpected error during login")
+        return "unexpected"
+
+
 class MyLight150ConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
@@ -46,12 +66,13 @@ class MyLight150ConfigFlow(ConfigFlow, domain=DOMAIN):
             self._abort_if_unique_id_configured()
 
             try:
-                session = async_get_clientsession(self.hass)
-###
-# Connection test to be done here
-# trying connection
-                if False:
-                    _errors["base"] = "invalid_credentials"
+                error_key = await _validate_credentials(
+                    self.hass,
+                    user_input[CONF_USERNAME],
+                    user_input[CONF_PASSWORD],
+                )
+                if error_key:
+                    _errors["base"] = error_key
                 else:
                     return self.async_create_entry(
                         title=user_input[CONF_USERNAME],
@@ -100,12 +121,13 @@ class MyLight150ConfigFlow(ConfigFlow, domain=DOMAIN):
             password = user_input[CONF_PASSWORD]
 
             try:
-                session = async_get_clientsession(self.hass)
-###
-# Connection test to be done here
-# trying connection
-                if False:
-                    _errors["base"] = "invalid_credentials"
+                error_key = await _validate_credentials(
+                    self.hass,
+                    reconfigure_entry.data[CONF_USERNAME],
+                    password,
+                )
+                if error_key:
+                    _errors["base"] = error_key
                 else:
                     return self.async_update_reload_and_abort(
                         reconfigure_entry,
@@ -113,8 +135,8 @@ class MyLight150ConfigFlow(ConfigFlow, domain=DOMAIN):
                             CONF_PASSWORD: password,
                         },
                     )
-            except Exception:  # noqa: BLE001
-                _LOGGER.exception("Audi reconfigure flow failed")
+            except Exception:
+                _LOGGER.exception("MyLight150 reconfigure flow failed!")
                 _errors["base"] = "unexpected"
 
         return self.async_show_form(
