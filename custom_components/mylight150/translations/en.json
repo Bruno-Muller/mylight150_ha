@@ -74,7 +74,7 @@
       "msb_power": { "name": "Virtual battery power" },
       "msb_autonomy": { "name": "Virtual battery autonomy" },
       "msb_capacity": { "name": "Virtual battery capacity" },
-      "savings": { "name": "Monthly money saving " }
+      "savings": { "name": "Monthly money saving" }
     },
     "switch": {
     }
