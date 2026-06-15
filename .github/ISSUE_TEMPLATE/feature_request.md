@@ -1,8 +1,11 @@
 ---
 name: Feature Request / Demande de fonctionnalité
-description: Suggest a new feature or proposer une nouvelle fonctionnalité
+about: 'Form to ask for a new feature for the integration / Formulaire de demande  de
+  nouvelle fonctionnalité pour l''intégration '
 title: "[FEAT] <short description / description courte>"
-labels: ["enhancement", "triage"]
+labels: enhancement
+assignees: ''
+
 ---
 
 body:

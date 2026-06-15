@@ -1,9 +1,11 @@
 ---
 name: Bug Report / Signalement de bug
-description: Report a bug or signaler un bug dans l'intégration MyLight150
+about: Form to report a bug in the integration / Formulaire de rapport de bug à propos
+  de l'intégration
 title: "[BUG] <short description / description courte>"
-labels: ["bug", "triage"]
-assignees: ""
+labels: bug
+assignees: ''
+
 ---
 
 body:
