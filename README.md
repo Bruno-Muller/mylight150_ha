@@ -1,10 +1,10 @@
 # Home Assistant MYLight150 Integration
 
-[![GitHub Release][releases-shield]][releases]
-[![hacs][hacsbadge]][hacs]
+[![GitHub Release][releases-shield]][releases] 
+[![hacs][hacsbadge]][hacs] 
 [![License][license-shield]](LICENSE)
 
-[![GitHub Activity][commits-shield]][commits]
+[![GitHub Activity][commits-shield]][commits] 
 ![Project Maintenance][maintenance-shield]
 
 
@@ -53,7 +53,7 @@ Find configuration options under **Settings ➤ Devices & Services ➤ Integrati
 | Name              | Type     | Default | Description                                                                                                                                       |
 | ----------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Update Interval` | `int`    | `10`    | Frequency (in minutes) to fetch status data from MyLight.<br>Minimum allowed is 10 minutes.<br>\* _Can be updated later via the CONFIGURE menu._  |
-| `Scan at startup` | `bool`   | `True`  | Aloow to do a full data update at every restart of Home Assistant._                                                                               |
+| `Scan at startup` | `bool`   | `True`  | Allow to do a full data update at every restart of Home Assistant._                                                                               |
 
 
 
