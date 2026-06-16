@@ -5,8 +5,7 @@ import logging
 from datetime import timedelta
 from typing import Any
 
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.event import async_track_time_change
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import MyLight150ApiClient, MyLight150ApiError, MyLight150AuthError
@@ -51,7 +50,8 @@ class MyLight150Coordinator(DataUpdateCoordinator[dict[str, Any]]):
             # Fetch device data and parse it for sensors
             parsed_data.update(await self._fetch_device_data())
 
-            # Fetch other data (historical, savings, etc.) if needed in the future
+            # Fetch yearly energy totals
+            parsed_data.update(await self._fetch_yearly_data())
 
             return parsed_data
 
@@ -61,40 +61,50 @@ class MyLight150Coordinator(DataUpdateCoordinator[dict[str, Any]]):
             raise UpdateFailed(f"Erreur API : {err}") from err
 
 
-    async def async_setup_nightly_refresh(self) -> None:
-        """Nightly refresh at 00h30 for aggregated data (historical, savings, etc.)"""
-        @callback
-        def _nightly_refresh_callback(*_: Any) -> None:
-            """Callback called at 00h30."""
-            self.hass.async_create_task(self._async_nightly_update())
-
-        # storing unsubscribe function to cancel the nightly refresh when unloading the integration
-        self._nightly_unsubscribe = async_track_time_change(
-            self.hass,
-            _nightly_refresh_callback,
-            hour=0,
-            minute=30,
-            second=0,
-        )
-        _LOGGER.debug("MyLight150: Nightly coordinator refresh planned at 00h30.")
-
-
-    async def _async_nightly_update(self) -> None:
-        """Nightly API calls for aggregated data (historical, savings, etc.)."""
-        _LOGGER.debug("MyLight150: Nightly refresh started.")
-
-# TODO: Call /v3/savings, /v3/production, /v3/consumption, etc.
-# Data will be merged into self.data via async_set_updated_data()
-
-        _LOGGER.debug("MyLight150: Nightly refresh completed")
-
-
     def async_teardown(self) -> None:
-        """Cancel nightly refresh when unloading the integration."""
-        if hasattr(self, "_nightly_unsubscribe"):
-            self._nightly_unsubscribe()
-            _LOGGER.debug(f"MyLight150: Nightly refresh canceled.")
+        """Cleanup when unloading the integration."""
 
+
+    async def _fetch_yearly_data(self) -> dict[str, Any]:
+        """
+        Fetch yearly energy totals from /v3/production?aggregation=Year
+        and /v3/consumption?aggregation=Year.
+
+        Keys produced:
+          yearly_solar_production_kwh  — énergie totale produite par les panneaux
+          yearly_self_consumption_kwh  — énergie auto-consommée (production → maison)
+          yearly_grid_injection_kwh    — énergie injectée sur le réseau
+          yearly_grid_purchase_kwh     — énergie achetée depuis la grid
+        """
+        parsed: dict[str, Any] = {}
+
+        # --- Production annuelle ---
+        try:
+            prod = await self._api.async_get_yearly_production()
+            bd = prod.get("breakdown", {})
+            total = bd.get("total")
+            parsed["yearly_solar_production_kwh"] = total if isinstance(total, (int, float)) else None
+            for item in bd.get("destination", []):
+                measure = (item.get("measure") or {})
+                if item.get("type") == "selfConsumption":
+                    parsed["yearly_self_consumption_kwh"] = measure.get("energy")
+                elif item.get("type") == "injection":
+                    parsed["yearly_grid_injection_kwh"] = measure.get("energy")
+        except Exception as err:
+            _LOGGER.warning("MyLight150: Yearly production fetch failed: %s", err)
+
+        # --- Consommation annuelle ---
+        try:
+            conso = await self._api.async_get_yearly_consumption()
+            bd = conso.get("breakdown", {})
+            for item in (bd.get("global") or {}).get("energies", []):
+                if item.get("type") == "paidEnergy":
+                    parsed["yearly_grid_purchase_kwh"] = (item.get("measure") or {}).get("energy")
+        except Exception as err:
+            _LOGGER.warning("MyLight150: Yearly consumption fetch failed: %s", err)
+
+        _LOGGER.debug("MyLight150: Yearly data parsed: %s", parsed)
+        return parsed
 
     # API Calls to MyLight150 endpoints
 

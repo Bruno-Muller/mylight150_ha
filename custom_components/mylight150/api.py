@@ -134,6 +134,14 @@ class MyLight150ApiClient:
             raise MyLight150ApiError(f"Connection error on {endpoint}: {err}") from err
 
 
+    async def async_get_yearly_consumption(self) -> dict[str, Any]:
+        """Fetch yearly consumption data from /v3/consumption?aggregation=Year."""
+        return await self.async_call_api("/v3/consumption?aggregation=Year")
+
+    async def async_get_yearly_production(self) -> dict[str, Any]:
+        """Fetch yearly production data from /v3/production?aggregation=Year."""
+        return await self.async_call_api("/v3/production?aggregation=Year")
+
     def restore_tokens(
         self,
         access_token: str,
