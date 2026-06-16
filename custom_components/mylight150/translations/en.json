@@ -75,6 +75,10 @@
       "msb_autonomy": { "name": "Virtual battery autonomy" },
       "msb_capacity": { "name": "Virtual battery capacity" },
       "savings": { "name": "Monthly money saving" },
+      "yearly_solar_production_kwh": { "name": "Yearly solar production" },
+      "yearly_self_consumption_kwh": { "name": "Yearly self-consumption" },
+      "yearly_grid_injection_kwh": { "name": "Yearly grid injection" },
+      "yearly_grid_purchase_kwh": { "name": "Yearly grid purchase" },
       "heatpump_mode": {
         "name": "Heat pump mode",
         "state": {

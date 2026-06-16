@@ -131,6 +131,48 @@ SENSORS: tuple[MyLight150SensorEntityDescription, ...] = (
         icon="mdi:piggy-bank",
     ),
 
+    # Yearly energy sensors (kWh, refreshed every 10 min)
+    MyLight150SensorEntityDescription(
+        key="yearly_solar_production_kwh",
+        data_key="yearly_solar_production_kwh",
+        has_entity_name=True,
+        translation_key="yearly_solar_production_kwh",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        device_class=SensorDeviceClass.ENERGY,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        icon="mdi:solar-power",
+    ),
+    MyLight150SensorEntityDescription(
+        key="yearly_self_consumption_kwh",
+        data_key="yearly_self_consumption_kwh",
+        has_entity_name=True,
+        translation_key="yearly_self_consumption_kwh",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        device_class=SensorDeviceClass.ENERGY,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        icon="mdi:home-lightning-bolt",
+    ),
+    MyLight150SensorEntityDescription(
+        key="yearly_grid_injection_kwh",
+        data_key="yearly_grid_injection_kwh",
+        has_entity_name=True,
+        translation_key="yearly_grid_injection_kwh",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        device_class=SensorDeviceClass.ENERGY,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        icon="mdi:transmission-tower-export",
+    ),
+    MyLight150SensorEntityDescription(
+        key="yearly_grid_purchase_kwh",
+        data_key="yearly_grid_purchase_kwh",
+        has_entity_name=True,
+        translation_key="yearly_grid_purchase_kwh",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        device_class=SensorDeviceClass.ENERGY,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        icon="mdi:transmission-tower-import",
+    ),
+
     # Equipments sensors
     MyLight150SensorEntityDescription(
         key="heatPump_mode",

@@ -75,6 +75,10 @@
       "msb_autonomy": { "name": "Autonomie batterie virtuelle" },
       "msb_capacity": { "name": "Capacité batterie virtuelle" },
       "savings": { "name": "Économies mensuelles" },
+      "yearly_solar_production_kwh": { "name": "Production solaire annuelle" },
+      "yearly_self_consumption_kwh": { "name": "Autoconsommation annuelle" },
+      "yearly_grid_injection_kwh": { "name": "Injection réseau annuelle" },
+      "yearly_grid_purchase_kwh": { "name": "Achat réseau annuel" },
       "heatpump_mode": {
         "name": "Mode smart de la PAC",
         "state": {
