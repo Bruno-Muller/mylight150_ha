@@ -46,8 +46,10 @@ class MyLight150Coordinator(DataUpdateCoordinator[dict[str, Any]]):
             parsed_data: dict[str, Any] = {}
 
             # Fetch realtime home data and parse it for sensors
-            home_data = await self._fetch_home_data()
-            parsed_data.update(self._parse_home_data(home_data))
+            parsed_data.update(await self._fetch_home_data())
+
+            # Fetch device data and parse it for sensors
+            parsed_data.update(await self._fetch_device_data())
 
             # Fetch other data (historical, savings, etc.) if needed in the future
 
@@ -80,8 +82,10 @@ class MyLight150Coordinator(DataUpdateCoordinator[dict[str, Any]]):
     async def _async_nightly_update(self) -> None:
         """Nightly API calls for aggregated data (historical, savings, etc.)."""
         _LOGGER.debug("MyLight150: Nightly refresh started.")
+
 # TODO: Call /v3/savings, /v3/production, /v3/consumption, etc.
 # Data will be merged into self.data via async_set_updated_data()
+
         _LOGGER.debug("MyLight150: Nightly refresh completed")
 
 
@@ -96,16 +100,18 @@ class MyLight150Coordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _fetch_installation_code(self) -> str:
         """Fetch installation code from /v2 endpoint."""
-        v2_data = await self._api.async_call_api("/v2")
-
-        # Chercher le lien "installation" dans la liste des links
-        for link in v2_data.get("links", []):
-            if link.get("rel") == "installation":
-                href = link.get("href", "")
-                code = href.rstrip("/").split("/")[-1]
-                if code:
-                    _LOGGER.debug(f"MyLight150: Installation code '{code}' found.")
-                    return code
+        try:
+            v2_data = await self._api.async_call_api("/v2")
+            # Searching for "installation" link
+            for link in v2_data.get("links", []):
+                if link.get("rel") == "installation":
+                    href = link.get("href", "")
+                    code = href.rstrip("/").split("/")[-1]
+                    if code:
+                        _LOGGER.debug(f"MyLight150: Installation code '{code}' found.")
+                        return code
+        except Exception as err:
+            _LOGGER.debug("Diagnostics: Error while retrieving /v2 : %s", err)
 
         raise UpdateFailed("MyLight150: Installation code not found in /v2")
     
@@ -113,34 +119,52 @@ class MyLight150Coordinator(DataUpdateCoordinator[dict[str, Any]]):
     async def _fetch_home_data(self) -> dict[str, Any]:
         """Fetch instant data from /v2/installations/{code}/home?msb=msb01 endpoint."""
         endpoint = f"/v2/installations/{self.installation_code}/home?msb=msb01"
-        return await self._api.async_call_api(endpoint)
+        try:
+            data = await self._api.async_call_api(endpoint)
+        
+            """Parse device data from /v2/installations/{code}/home?msb=msb01 endpoint."""
+            parsed: dict[str, Any] = {
+                # Live powers (kW)
+                "solar_production":  data.get("solarProduction", {}).get("value"),
+                "grid":              data.get("grid", {}).get("value"),
+                "injection":         data.get("injection", {}).get("value"),
+                "load":              data.get("load", {}).get("value"),
+                # MySmartBattery (virtual battery)
+                "msb_state":         data.get("msb", {}).get("state"),
+                "msb_power":         data.get("msb", {}).get("power", {}).get("value"),
+                "msb_autonomy":      data.get("msb", {}).get("autonomy", {}).get("value"),
+                "msb_capacity":      data.get("msb", {}).get("capacity", {}).get("value"),
+                # Saving (weekly display)
+                "savings":           data.get("savings", {}).get("amount", {}).get("value"),
+                # Timestamp of the data (UTC)
+                "timestamp":         data.get("timestamp"),
+            }
+
+            _LOGGER.debug("MyLight150: Data parsed for live home: %s", parsed)
+            return parsed
+        
+        except Exception as err:
+            _LOGGER.debug("Diagnostics: Error while retrieving %s : %s", endpoint, err)
 
 
-    def _parse_home_data(self, data: dict[str, Any]) -> dict[str, Any]:
+    async def _fetch_device_data(self) -> dict[str, Any]:
+        """Fetch device data from /v3/equipments endpoint."""
+        try:
+            data = await self._api.async_call_api("/v3/equipments")
+        
+            """Parse device data from /v3/equipments endpoint."""
+            equipments = data.get("equipments", [])
 
-        def _val(key: str) -> float | None:
-            """Extract value from a sub-dict {value, unit}, or None if absent."""
-            block = data.get(key)
-            if isinstance(block, dict):
-                return block.get("value")
-            return None
+            parsed: dict[str, Any] = {}
+            
+            for equipment in equipments:
+                equipment_type = equipment.get("equipmentType")
+                current_mode = equipment.get("currentMode")
+                if equipment_type and current_mode:
+                    parsed.update({f"{equipment_type}_mode": current_mode})
 
-        parsed: dict[str, Any] = {
-            # Live powers (kW)
-            "solar_production":  _val("solarProduction"),
-            "grid":              _val("grid"),
-            "injection":         _val("injection"),
-            "load":              _val("load"),
-            # MySmartBattery (virtual battery)
-            "msb_state":         data.get("msb", {}).get("state"),
-            "msb_power":         data.get("msb", {}).get("power", {}).get("value"),
-            "msb_autonomy":      data.get("msb", {}).get("autonomy", {}).get("value"),
-            "msb_capacity":      data.get("msb", {}).get("capacity", {}).get("value"),
-            # Saving (weekly display)
-            "savings":           data.get("savings", {}).get("amount", {}).get("value"),
-            # Timestamp of the data (UTC)
-            "timestamp":         data.get("timestamp"),
-        }
-
-        _LOGGER.debug("MyLight150: Data parsed for live home: %s", parsed)
-        return parsed
+            _LOGGER.debug("MyLight150: Data parsed for equipments: %s", parsed)
+            return parsed
+        
+        except Exception as err:
+            _LOGGER.debug("Diagnostics: Error while retrieving /v3/equipments : %s", err)

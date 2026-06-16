@@ -108,6 +108,6 @@ async def _async_fetch_diagnostic_endpoints(
         except Exception as err:
             # Catching all exceptions to prevent the diagnostic from being blocked
             results[key] = {"error": str(err)}
-            _LOGGER.debug("Diagnostics: erreur sur %s : %s", endpoint, err)
+            _LOGGER.debug("Diagnostics: Error on requesting %s : %s", endpoint, err)
 
     return results

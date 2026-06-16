@@ -130,6 +130,24 @@ SENSORS: tuple[MyLight150SensorEntityDescription, ...] = (
         state_class=SensorStateClass.TOTAL_INCREASING,
         icon="mdi:piggy-bank",
     ),
+
+    # Equipments sensors
+    MyLight150SensorEntityDescription(
+        key="heatPump_mode",
+        data_key="heatPump_mode",
+        has_entity_name = True,
+        translation_key= "heatPump_mode",
+        # Text status, no unit, no device class
+        icon="mdi:heating-coil",
+    ),
+    MyLight150SensorEntityDescription(
+        key="waterHeater_mode",
+        data_key="waterHeater_mode",
+        has_entity_name = True,
+        translation_key= "waterHeater_mode",
+        # Text status, no unit, no device class
+        icon="mdi:water-boiler",
+    ),
 )
 
 
@@ -167,7 +185,7 @@ class MyLight150SensorEntity(CoordinatorEntity[MyLight150Coordinator], SensorEnt
         installation_code = coordinator.installation_code or entry.entry_id
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, installation_code)},
-            name=f"MyLight150 {installation_code}",
+            name=f"MyLight150 ({installation_code})",
             manufacturer="MyLight Systems",
             model="MySmartBattery",
             configuration_url="https://client.mylight150.com",
