@@ -74,7 +74,20 @@
       "msb_power": { "name": "Virtual battery power" },
       "msb_autonomy": { "name": "Virtual battery autonomy" },
       "msb_capacity": { "name": "Virtual battery capacity" },
-      "savings": { "name": "Monthly money saving" }
+      "savings": { "name": "Monthly money saving" },
+      "heatPump_mode": { "name": "Heat pump mode",
+        "state": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "waterHeater_mode": { "name": "Water heater mode",
+        "state": {
+          "off": "Off",
+          "smart": "Smart",
+          "comfort": "Comfort"
+        }
+      }
     },
     "switch": {
     }

@@ -74,7 +74,20 @@
       "msb_power": { "name": "Puissance batterie virtuelle" },
       "msb_autonomy": { "name": "Autonomie batterie virtuelle" },
       "msb_capacity": { "name": "Capacité batterie virtuelle" },
-      "savings": { "name": "Économies mensuelles" }
+      "savings": { "name": "Économies mensuelles" },
+      "heatPump_mode": { "name": "Mode smart de la PAC",
+        "state": {
+          "off": "Eteint",
+          "on": "Allumé"
+        }
+      },
+      "waterHeater_mode": { "name": "Mode du chauffe-eau",
+        "state": {
+          "off": "Veille",
+          "smart": "Smart",
+          "comfort": "Marche forcée"
+        }
+      }
     },
     "switch": {
     }
